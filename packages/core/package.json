@@ -1,0 +1,26 @@
+{
+  "name": "@slidesjs/core",
+  "version": "0.0.0",
+  "description": "Core React runtime for slidesjs presentations — the deck, slides, navigation hook and theming.",
+  "type": "module",
+  "license": "MIT",
+  "files": ["dist"],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./theme.css": "./dist/theme.css"
+  },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  }
+}

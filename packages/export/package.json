@@ -1,0 +1,28 @@
+{
+  "name": "@slidesjs/export",
+  "version": "0.0.0",
+  "description": "Export slidesjs decks to PDF, static HTML or PNG using headless Chrome.",
+  "type": "module",
+  "license": "MIT",
+  "files": ["dist"],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "slidesjs-export": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "puppeteer-core": "^23.10.0",
+    "sirv": "^3.0.0"
+  }
+}

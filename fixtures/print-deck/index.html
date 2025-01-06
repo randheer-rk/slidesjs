@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Print Deck Fixture</title>
+    <style>
+      body { margin: 0; font-family: sans-serif; }
+      .page { width: 100%; min-height: 100vh; break-after: page; display: flex; align-items: center; justify-content: center; }
+      .page:nth-child(1) { background: #FAFAF7; color: #111; }
+      .page:nth-child(2) { background: #E8401C; color: #fff; }
+      .page:nth-child(3) { background: #121212; color: #FAFAF7; }
+    </style>
+  </head>
+  <body>
+    <div class="page" data-slide-index="0"><h1>One</h1></div>
+    <div class="page" data-slide-index="1"><h1>Two</h1></div>
+    <div class="page" data-slide-index="2"><h1>Three</h1></div>
+    <script>
+      window.__SLIDES_COUNT__ = 3
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          window.__SLIDES_READY__ = true
+        })
+      })
+    </script>
+  </body>
+</html>

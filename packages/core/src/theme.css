@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap');
+
+@font-face {
+  font-family: 'Cascadia Code';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code/files/cascadia-code-latin-400-normal.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: 'Cascadia Code';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code/files/cascadia-code-latin-700-normal.woff2')
+    format('woff2');
+}
+
+.slides-root {
+  background: var(--slides-bg);
+  color: var(--slides-fg);
+  font-family: var(--slides-font-body);
+}
+
+.slides-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.slides-scroller {
+  scrollbar-width: none;
+}
+
+@keyframes slides-zoom-through {
+  0% {
+    transform: scale(0.88) translateY(9vh);
+    opacity: 0;
+  }
+  35% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.88) translateY(-9vh);
+    opacity: 0;
+  }
+}
+
+@keyframes slides-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.slides-inner {
+  animation: slides-zoom-through linear both;
+  animation-timeline: view();
+}
+
+.slides-blink {
+  animation: slides-blink 1.1s step-end infinite;
+}
+
+.slides-print .slides-inner {
+  animation: none;
+}
