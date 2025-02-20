@@ -1,0 +1,22 @@
+{
+  "name": "@slidesjs/example-components",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "export": "slidesjs-export --dist ./dist --out ./deck.pdf --format pdf"
+  },
+  "dependencies": {
+    "@slidesjs/core": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@slidesjs/export": "workspace:*",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.3"
+  }
+}

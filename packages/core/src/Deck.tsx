@@ -1,4 +1,4 @@
-import { Children, useEffect, useMemo, useRef } from 'react'
+import { Children, isValidElement, useEffect, useMemo, useRef } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { Chrome } from './Chrome'
 import { Slide } from './Slide'
@@ -43,12 +43,15 @@ const renderSpec = (spec: SlideSpec) => {
   )
 }
 
+const asSlide = (node: ReactNode): ReactNode =>
+  isValidElement(node) && node.type === Slide ? node : <Slide>{node}</Slide>
+
 export function Deck({ slides, config = {}, chrome = true, children }: DeckProps) {
   const print = isPrint()
   const childArray = useMemo(() => Children.toArray(children), [children])
   const items: ReactNode[] = slides
     ? slides.map((spec, i) => <div key={spec.id ?? i}>{renderSpec(spec)}</div>)
-    : childArray
+    : childArray.map(asSlide)
   const total = items.length || 1
 
   const deck = useDeck({ ...config, total })

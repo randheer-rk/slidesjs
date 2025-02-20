@@ -99,3 +99,27 @@ import { Deck, Slide } from '@slidesjs/core'
 ```
 
 When you pass children like this, the `Deck` counts them for you, so you need not specify the total number of slides anywhere.
+
+### Wrapping a list of components
+
+You do not have to reach for `Slide` at all. Any top-level child you pass is automatically wrapped in a `Slide` for you, so a plain list of components renders one slide per component:
+
+```tsx
+import { Deck } from '@slidesjs/core'
+
+<Deck>
+  <Hero />
+  <About />
+  <Contact />
+</Deck>
+```
+
+Reach for `Slide` only when a particular slide needs its own settings — mix the two freely, and any child that already is a `Slide` is left exactly as you wrote it:
+
+```tsx
+<Deck>
+  <Hero />
+  <Slide layout="split" accent="#0af"><About /></Slide>
+  <Contact />
+</Deck>
+```
