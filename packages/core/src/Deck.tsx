@@ -1,10 +1,11 @@
-import { Children, isValidElement, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { Chrome } from './Chrome'
-import { Slide } from './Slide'
+import { Slide, wrapAsSlide } from './Slide'
+import { SlideRow } from './SlideRow'
 import { useDeck } from './useDeck'
 import { isPrintMode } from './print'
-import type { DeckConfig, SlideSpec } from './types'
+import type { ChromeOptions, DeckConfig, SlideSpec } from './types'
 
 const isPrint = (): boolean => isPrintMode()
 
@@ -30,7 +31,7 @@ const scrollerStyle = (print: boolean): CSSProperties => ({
 export interface DeckProps {
   slides?: SlideSpec[]
   config?: DeckConfig
-  chrome?: boolean
+  chrome?: boolean | ChromeOptions
   children?: ReactNode
 }
 
@@ -43,15 +44,25 @@ const renderSpec = (spec: SlideSpec) => {
   )
 }
 
-const asSlide = (node: ReactNode): ReactNode =>
-  isValidElement(node) && node.type === Slide ? node : <Slide>{node}</Slide>
+const toTopLevel = (children: ReactNode): ReactNode[] => {
+  if (children == null || children === false) return []
+  const arr = Array.isArray(children) ? children : [children]
+  return arr.filter((c) => c != null && c !== false && c !== true)
+}
+
+const renderChild = (child: ReactNode, autoScrollH?: number): ReactNode =>
+  Array.isArray(child) ? (
+    <SlideRow autoScroll={autoScrollH}>{child}</SlideRow>
+  ) : (
+    wrapAsSlide(child)
+  )
 
 export function Deck({ slides, config = {}, chrome = true, children }: DeckProps) {
   const print = isPrint()
-  const childArray = useMemo(() => Children.toArray(children), [children])
+  const topLevel = useMemo(() => toTopLevel(children), [children])
   const items: ReactNode[] = slides
     ? slides.map((spec, i) => <div key={spec.id ?? i}>{renderSpec(spec)}</div>)
-    : childArray.map(asSlide)
+    : topLevel.map((child) => renderChild(child, config.autoScroll?.horizontal))
   const total = items.length || 1
 
   const deck = useDeck({ ...config, total })
@@ -86,7 +97,9 @@ export function Deck({ slides, config = {}, chrome = true, children }: DeckProps
           </div>
         ))}
       </div>
-      {chrome && !print ? <Chrome controller={deck} /> : null}
+      {chrome && !print ? (
+        <Chrome controller={deck} options={typeof chrome === 'object' ? chrome : undefined} />
+      ) : null}
     </>
   )
 }

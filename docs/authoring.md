@@ -123,3 +123,123 @@ Reach for `Slide` only when a particular slide needs its own settings — mix th
   <Contact />
 </Deck>
 ```
+
+## Customising the chrome
+
+The "chrome" is the on-screen furniture the `Deck` draws around your slides: the
+progress bar, the slide counter, and the navigation dots. By default you get all
+three. Pass `chrome={false}` to hide them entirely, or pass an object to tune
+each part.
+
+```tsx
+<Deck
+  chrome={{
+    progress: true,
+    counter: { position: 'top-left', style: { fontSize: 16 } },
+    dots: {
+      position: 'bottom-right',
+      orientation: 'vertical',
+      arrows: true,
+      dotStyle: (active) => ({
+        width: 10,
+        height: 10,
+        borderRadius: '50%',
+        background: active ? '#7c5cff' : 'var(--slides-fg)',
+        opacity: active ? 1 : 0.3,
+      }),
+    },
+  }}
+>
+  {/* slides */}
+</Deck>
+```
+
+### Positions
+
+`counter` and `dots` each take a `position` — one of `top-left`, `top-right`,
+`bottom-left`, or `bottom-right`. The counter defaults to `bottom-left` and the
+dots to `bottom-right`.
+
+### Dot orientation and arrows
+
+The dots are drawn as a rail of small ticks; the active slide stretches into a
+rounded pill in the accent colour (the same accent as the progress bar). Because
+the deck scrolls vertically, the rail is `vertical` by default — set
+`dots.orientation` to `horizontal` if you prefer a bottom row instead.
+
+When you turn on `dots.arrows`, prev/next chevrons appear flanking the dots and
+follow the orientation automatically — up/down for the vertical rail, left/right
+for a horizontal one. They fade and disable themselves on the first and last
+slide.
+
+### Styling
+
+Every part accepts a `style` (and `className`) for its container. The dots also
+take a `dotStyle(active)` callback for the individual dot buttons and an
+`arrowStyle` for the arrow buttons. The counter accepts a `render` callback if
+you want to replace its content completely:
+
+```tsx
+chrome={{ counter: { render: ({ current, total }) => `${current} of ${total}` } }}
+```
+
+Set any individual part to `false` to hide just that piece — for example
+`chrome={{ progress: false }}` keeps the counter and dots but drops the bar.
+
+## Horizontal sub-slides
+
+The deck scrolls vertically. If you want a side-trip — a sequence the audience
+moves through left-to-right before carrying on down — pass a **list** as one
+child. That list becomes a horizontal row of sub-slides occupying a single
+vertical slide:
+
+```tsx
+<Deck>
+  <Intro />
+  {[<DeepDiveA />, <DeepDiveB />, <DeepDiveC />]}
+  <Conclusion />
+</Deck>
+```
+
+Inside a row you navigate with the **left/right** arrow keys, a sideways swipe
+or trackpad gesture, or the row's own dots; the **up/down** arrows still move
+between the vertical slides. The row only responds to the horizontal keys while
+it is the slide on screen. When you export to PDF the sub-slides are stacked
+vertically so every one is captured.
+
+You can also build a row explicitly with the `SlideRow` component, which is what
+a list child renders to under the hood:
+
+```tsx
+import { SlideRow } from '@slidesjs/core'
+
+<Deck>
+  <Intro />
+  <SlideRow>
+    <DeepDiveA />
+    <DeepDiveB />
+  </SlideRow>
+</Deck>
+```
+
+## Auto-advancing the deck
+
+You can have the deck advance on its own. The two axes are configured separately
+through the `config` prop, each as an interval in milliseconds:
+
+```tsx
+<Deck
+  config={{
+    autoScroll: {
+      vertical: 8000,    // step down to the next slide every 8s
+      horizontal: 4000,  // step across sub-slides within a row every 4s
+    },
+  }}
+>
+  {/* slides */}
+</Deck>
+```
+
+Set either axis to `0` or leave it out to keep that axis manual. Both loop back
+to the start when they reach the end. Horizontal auto-advance only runs while its
+row is the slide on screen.

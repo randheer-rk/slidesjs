@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react'
+import type { ComponentType, CSSProperties, ReactNode } from 'react'
 
 export type ThemeMode = 'light' | 'dark' | 'system'
 
@@ -34,6 +34,11 @@ export interface ResolvedTheme {
   vars: Record<string, string>
 }
 
+export interface AutoScrollConfig {
+  vertical?: number
+  horizontal?: number
+}
+
 export interface DeckConfig {
   total?: number
   glideMs?: number
@@ -42,6 +47,7 @@ export interface DeckConfig {
   gestureSettleMs?: number
   snapType?: string
   loop?: boolean
+  autoScroll?: AutoScrollConfig
   onChange?: (idx: number) => void
 }
 
@@ -59,6 +65,42 @@ export interface DeckController {
   counterCurrent: string
   counterTotal: string
   progressPct: string
+}
+
+export type ChromeCorner =
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right'
+
+export type DotsOrientation = 'horizontal' | 'vertical'
+
+export interface ChromeCounterOptions {
+  position?: ChromeCorner
+  style?: CSSProperties
+  className?: string
+  render?: (info: { current: string; total: string; idx: number; total_: number }) => ReactNode
+}
+
+export interface ChromeDotsOptions {
+  position?: ChromeCorner
+  orientation?: DotsOrientation
+  arrows?: boolean
+  style?: CSSProperties
+  className?: string
+  dotStyle?: (active: boolean) => CSSProperties
+  arrowStyle?: CSSProperties
+}
+
+export interface ChromeProgressOptions {
+  style?: CSSProperties
+  className?: string
+}
+
+export interface ChromeOptions {
+  progress?: boolean | ChromeProgressOptions
+  counter?: boolean | ChromeCounterOptions
+  dots?: boolean | ChromeDotsOptions
 }
 
 export interface SlideSpec {

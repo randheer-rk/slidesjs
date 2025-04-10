@@ -112,6 +112,43 @@ describe('useDeck', () => {
     expect(el.scrollTop).toBe(0)
   })
 
+  it('auto-advances vertically on the configured interval and loops', () => {
+    vi.useFakeTimers()
+    try {
+      const { result } = renderHook(() => useDeck({ total: 3, autoScroll: { vertical: 1000 } }))
+      const el = makeScroller(800)
+      act(() => result.current.setScroller(el))
+
+      act(() => vi.advanceTimersByTime(1000))
+      expect(el.scrollTop).toBe(800)
+
+      scrollTo(el, 800)
+      act(() => result.current.onScroll({ currentTarget: el }))
+      act(() => vi.advanceTimersByTime(1000))
+      expect(el.scrollTop).toBe(1600)
+
+      scrollTo(el, 1600)
+      act(() => result.current.onScroll({ currentTarget: el }))
+      act(() => vi.advanceTimersByTime(1000))
+      expect(el.scrollTop).toBe(0)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('does not auto-advance when no interval is configured', () => {
+    vi.useFakeTimers()
+    try {
+      const { result } = renderHook(() => useDeck({ total: 3 }))
+      const el = makeScroller(800)
+      act(() => result.current.setScroller(el))
+      act(() => vi.advanceTimersByTime(5000))
+      expect(el.scrollTop).toBe(0)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('ignores wheel travel below the trigger and acts above it', () => {
     const { result } = renderHook(() => useDeck({ total: 5, wheelTrigger: 30 }))
     const el = makeScroller(800)

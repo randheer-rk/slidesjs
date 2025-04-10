@@ -1,6 +1,7 @@
 export { useDeck } from './useDeck'
 export { Deck } from './Deck'
 export { Slide } from './Slide'
+export { SlideRow } from './SlideRow'
 export { Chrome } from './Chrome'
 export { ThemeProvider, useTheme } from './ThemeProvider'
 export { isPrintMode } from './print'
@@ -26,8 +27,15 @@ export type {
   SlideProps,
   SlideLayout,
   SlideAlign,
+  ChromeCorner,
+  DotsOrientation,
+  ChromeOptions,
+  ChromeCounterOptions,
+  ChromeDotsOptions,
+  ChromeProgressOptions,
 } from './types'
 
 export type { ChromeProps } from './Chrome'
 export type { DeckProps } from './Deck'
+export type { SlideRowProps } from './SlideRow'
 export type { ThemeProviderProps } from './ThemeProvider'

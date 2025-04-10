@@ -47,6 +47,24 @@ export function Counter() {
   )
 }
 
+function DeepDive({ n, label }: { n: string; label: string }) {
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <p style={{ fontFamily: 'var(--slides-font-mono)', opacity: 0.6, letterSpacing: '0.1em' }}>
+        DEEP DIVE — {n}
+      </p>
+      <h2 style={{ fontSize: 'clamp(28px, 5vw, 56px)' }}>{label}</h2>
+      <p style={{ fontSize: 'clamp(14px, 2vw, 20px)', opacity: 0.6 }}>
+        Arrow ← / → or swipe sideways. Arrow ↑ / ↓ moves between vertical slides.
+      </p>
+    </div>
+  )
+}
+
+export const DeepDiveA = () => <DeepDive n="1 / 3" label="Set the scene" />
+export const DeepDiveB = () => <DeepDive n="2 / 3" label="Show the detail" />
+export const DeepDiveC = () => <DeepDive n="3 / 3" label="Land the point" />
+
 export function Outro() {
   return (
     <div style={{ textAlign: 'center' }}>

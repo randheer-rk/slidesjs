@@ -96,6 +96,16 @@ export function useDeck(config: DeckConfig = {}): DeckController {
   const next = useCallback(() => goTo(idxRef.current + 1), [goTo])
   const prev = useCallback(() => goTo(idxRef.current - 1), [goTo])
 
+  const autoMs = config.autoScroll?.vertical
+  useEffect(() => {
+    if (!autoMs || autoMs <= 0) return
+    const id = setInterval(() => {
+      const cur = idxRef.current
+      goTo(cur >= total - 1 ? 0 : cur + 1)
+    }, autoMs)
+    return () => clearInterval(id)
+  }, [autoMs, total, goTo])
+
   const onScroll = useCallback(
     (e: { currentTarget: HTMLElement }) => {
       const el = e.currentTarget

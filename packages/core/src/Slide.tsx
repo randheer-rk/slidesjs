@@ -1,4 +1,5 @@
-import type { CSSProperties } from 'react'
+import { isValidElement } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import type { SlideAlign, SlideProps } from './types'
 
 const alignItems: Record<SlideAlign, string> = {
@@ -35,3 +36,6 @@ export function Slide({
     </section>
   )
 }
+
+export const wrapAsSlide = (node: ReactNode): ReactNode =>
+  isValidElement(node) && node.type === Slide ? node : <Slide>{node}</Slide>
