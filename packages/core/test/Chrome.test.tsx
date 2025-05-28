@@ -81,6 +81,16 @@ describe('Chrome customisation', () => {
     expect(screen.getByTestId('slides-counter')).toHaveTextContent('slide 1')
   })
 
+  it('centres the dots on an edge for left/right positions', () => {
+    render(<Chrome controller={controller()} options={{ dots: { position: 'right' } }} />)
+    expect(screen.getByTestId('slides-dots')).toHaveStyle({
+      position: 'fixed',
+      right: '28px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+    })
+  })
+
   it('defaults to a vertical rail with up/down chevrons', () => {
     render(<Chrome controller={controller()} options={{ dots: { arrows: true } }} />)
     expect(screen.getByTestId('slides-dots')).toHaveAttribute('data-orientation', 'vertical')
@@ -118,6 +128,48 @@ describe('Chrome customisation', () => {
     )
     fireEvent.click(screen.getByRole('button', { name: 'Next slide' }))
     expect(next).toHaveBeenCalled()
+  })
+
+  it('applies appearance options to the dots rail', () => {
+    render(
+      <Chrome
+        controller={controller()}
+        options={{
+          dots: {
+            appearance: {
+              background: 'rgb(20, 20, 20)',
+              opacity: 0.9,
+              borderColor: 'rgb(255, 0, 0)',
+              borderWidth: 2,
+              shadow: true,
+              radius: 14,
+              padding: 8,
+            },
+          },
+        }}
+      />,
+    )
+    expect(screen.getByTestId('slides-dots')).toHaveStyle({
+      background: 'rgb(20, 20, 20)',
+      opacity: '0.9',
+      border: '2px solid rgb(255, 0, 0)',
+      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.18)',
+      borderRadius: '14px',
+      padding: '8px',
+    })
+  })
+
+  it('accepts a custom shadow string and styles the counter chip', () => {
+    render(
+      <Chrome
+        controller={controller()}
+        options={{ counter: { appearance: { background: '#222', shadow: '0 0 2px #000' } } }}
+      />,
+    )
+    expect(screen.getByTestId('slides-counter')).toHaveStyle({
+      background: '#222',
+      boxShadow: '0 0 2px #000',
+    })
   })
 
   it('applies a custom dot style', () => {

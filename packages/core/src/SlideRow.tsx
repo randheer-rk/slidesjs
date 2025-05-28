@@ -1,8 +1,10 @@
 import { Children, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { clampSlide, easeInOutCubic } from './deckMath'
+import { DotsRail } from './DotsRail'
 import { isPrintMode } from './print'
 import { wrapAsSlide } from './Slide'
+import type { ChromeDotsOptions } from './types'
 
 const GLIDE_MS = 500
 const WHEEL_TRIGGER = 30
@@ -44,9 +46,10 @@ const dotsStyle: CSSProperties = {
 export interface SlideRowProps {
   children: ReactNode
   autoScroll?: number
+  chrome?: ChromeDotsOptions
 }
 
-export function SlideRow({ children, autoScroll }: SlideRowProps) {
+export function SlideRow({ children, autoScroll, chrome = {} }: SlideRowProps) {
   const slides = useMemo(() => Children.toArray(children).map(wrapAsSlide), [children])
   const total = Math.max(1, slides.length)
   const print = isPrintMode()
@@ -200,24 +203,23 @@ export function SlideRow({ children, autoScroll }: SlideRowProps) {
         ))}
       </div>
       {total > 1 ? (
-        <nav
-          className="slides-dots"
-          data-orientation="horizontal"
-          data-testid="slides-row-dots"
-          aria-label="Sub-slides"
-          style={dotsStyle}
-        >
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              className="slides-dot"
-              aria-label={`Go to sub-slide ${i + 1}`}
-              aria-current={i === idx ? 'true' : undefined}
-              onClick={() => goTo(i)}
-            />
-          ))}
-        </nav>
+        <DotsRail
+          nav={{
+            idx,
+            total,
+            goTo,
+            next: () => goTo(idxRef.current + 1),
+            prev: () => goTo(idxRef.current - 1),
+            onFirst: idx === 0,
+            onLast: idx === total - 1,
+          }}
+          options={chrome}
+          orientation={chrome.orientation ?? 'horizontal'}
+          baseStyle={dotsStyle}
+          noun="sub-slide"
+          testid="slides-row-dots"
+          ariaLabel="Sub-slides"
+        />
       ) : null}
     </div>
   )

@@ -5,7 +5,7 @@ import { Slide, wrapAsSlide } from './Slide'
 import { SlideRow } from './SlideRow'
 import { useDeck } from './useDeck'
 import { isPrintMode } from './print'
-import type { ChromeOptions, DeckConfig, SlideSpec } from './types'
+import type { ChromeDotsOptions, ChromeOptions, DeckConfig, SlideSpec } from './types'
 
 const isPrint = (): boolean => isPrintMode()
 
@@ -50,9 +50,15 @@ const toTopLevel = (children: ReactNode): ReactNode[] => {
   return arr.filter((c) => c != null && c !== false && c !== true)
 }
 
-const renderChild = (child: ReactNode, autoScrollH?: number): ReactNode =>
+const renderChild = (
+  child: ReactNode,
+  autoScrollH?: number,
+  rowDots?: ChromeDotsOptions,
+): ReactNode =>
   Array.isArray(child) ? (
-    <SlideRow autoScroll={autoScrollH}>{child}</SlideRow>
+    <SlideRow autoScroll={autoScrollH} chrome={rowDots}>
+      {child}
+    </SlideRow>
   ) : (
     wrapAsSlide(child)
   )
@@ -60,9 +66,10 @@ const renderChild = (child: ReactNode, autoScrollH?: number): ReactNode =>
 export function Deck({ slides, config = {}, chrome = true, children }: DeckProps) {
   const print = isPrint()
   const topLevel = useMemo(() => toTopLevel(children), [children])
+  const rowDots = typeof chrome === 'object' ? chrome.rowDots : undefined
   const items: ReactNode[] = slides
     ? slides.map((spec, i) => <div key={spec.id ?? i}>{renderSpec(spec)}</div>)
-    : topLevel.map((child) => renderChild(child, config.autoScroll?.horizontal))
+    : topLevel.map((child) => renderChild(child, config.autoScroll?.horizontal, rowDots))
   const total = items.length || 1
 
   const deck = useDeck({ ...config, total })

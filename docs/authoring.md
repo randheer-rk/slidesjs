@@ -157,8 +157,9 @@ each part.
 ### Positions
 
 `counter` and `dots` each take a `position` — one of `top-left`, `top-right`,
-`bottom-left`, or `bottom-right`. The counter defaults to `bottom-left` and the
-dots to `bottom-right`.
+`bottom-left`, `bottom-right`, or — handy for the vertical dot rail — `left` or
+`right`, which centre it on that edge. The counter defaults to `bottom-left` and
+the dots to `bottom-right`.
 
 ### Dot orientation and arrows
 
@@ -243,3 +244,52 @@ through the `config` prop, each as an interval in milliseconds:
 Set either axis to `0` or leave it out to keep that axis manual. Both loop back
 to the start when they reach the end. Horizontal auto-advance only runs while its
 row is the slide on screen.
+
+### Surface (background, border, shadow)
+
+The counter and the dots rail each take an `appearance` object for the common
+panel treatments, so you can float them on a chip without writing raw CSS:
+
+```tsx
+chrome={{
+  dots: {
+    position: 'right',
+    appearance: {
+      background: 'rgba(255, 255, 255, 0.06)',
+      opacity: 1,
+      borderColor: 'rgba(255, 255, 255, 0.12)',
+      borderWidth: 1,        // px; implies a solid border
+      shadow: true,          // or any box-shadow string
+      radius: 999,           // px corner radius
+      padding: 12,           // px room around the dots
+    },
+  },
+}}
+```
+
+`shadow: true` uses a sensible default; pass a string for a custom one. Give the
+surface a `padding` (and usually a `radius`) when you add a `background` or
+border. Anything in `style` still wins, so you can override a specific property.
+
+### Styling a row's dots
+
+A row has its own dot indicator (bottom-centre), and it takes the **same options
+as the deck dots** — arrows, `appearance`, `dotStyle`, `arrowStyle`. Set them for
+every list-child row through `chrome.rowDots`:
+
+```tsx
+<Deck
+  chrome={{
+    rowDots: {
+      arrows: true,
+      appearance: { background: 'rgba(255,255,255,0.06)', borderWidth: 1, radius: 999, padding: 8 },
+    },
+  }}
+>
+  <Intro />
+  {[<DeepDiveA />, <DeepDiveB />]}
+</Deck>
+```
+
+An explicit `SlideRow` takes the same options directly via its `chrome` prop:
+`<SlideRow chrome={{ arrows: true }}>…</SlideRow>`.

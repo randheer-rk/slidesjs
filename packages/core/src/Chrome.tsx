@@ -1,9 +1,10 @@
 import type { CSSProperties } from 'react'
+import { DotsRail, surfaceStyle } from './DotsRail'
 import type {
-  ChromeCorner,
   ChromeCounterOptions,
   ChromeDotsOptions,
   ChromeOptions,
+  ChromePosition,
   ChromeProgressOptions,
   DeckController,
   DotsOrientation,
@@ -35,30 +36,12 @@ const counterBaseStyle: CSSProperties = {
 }
 
 const GAP = 28
-const cornerStyle = (corner: ChromeCorner): CSSProperties => {
-  const [v, h] = corner.split('-') as ['top' | 'bottom', 'left' | 'right']
+const positionStyle = (pos: ChromePosition): CSSProperties => {
+  if (pos === 'left' || pos === 'right') {
+    return { position: 'fixed', [pos]: GAP, top: '50%', transform: 'translateY(-50%)' }
+  }
+  const [v, h] = pos.split('-') as ['top' | 'bottom', 'left' | 'right']
   return { position: 'fixed', [v]: GAP, [h]: GAP }
-}
-
-type ChevronDir = 'left' | 'right' | 'up' | 'down'
-const CHEVRON_PATH: Record<ChevronDir, string> = {
-  left: 'M15 18l-6-6 6-6',
-  right: 'M9 18l6-6-6-6',
-  up: 'M18 15l-6-6-6 6',
-  down: 'M6 9l6 6 6-6',
-}
-
-function Chevron({ dir }: { dir: ChevronDir }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-      <path d={CHEVRON_PATH[dir]} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-const arrowDir = (orientation: DotsOrientation, edge: 'prev' | 'next'): ChevronDir => {
-  if (orientation === 'vertical') return edge === 'prev' ? 'up' : 'down'
-  return edge === 'prev' ? 'left' : 'right'
 }
 
 const resolve = <T,>(opt: boolean | T | undefined, fallback: T): T | null => {
@@ -106,7 +89,8 @@ export function Chrome({ controller, options = {} }: ChromeProps) {
           className={counter.className}
           style={{
             ...counterBaseStyle,
-            ...cornerStyle(counter.position ?? 'bottom-left'),
+            ...positionStyle(counter.position ?? 'bottom-left'),
+            ...surfaceStyle(counter.appearance),
             ...counter.style,
           }}
         >
@@ -117,54 +101,15 @@ export function Chrome({ controller, options = {} }: ChromeProps) {
       ) : null}
 
       {dots ? (
-        <nav
-          data-testid="slides-dots"
-          data-orientation={orientation}
-          aria-label="Slides"
-          className={['slides-dots', dots.className].filter(Boolean).join(' ')}
-          style={{ ...cornerStyle(dots.position ?? 'bottom-right'), ...dots.style }}
-        >
-          {dots.arrows ? (
-            <button
-              type="button"
-              className="slides-arrow"
-              aria-label="Previous slide"
-              disabled={onFirst}
-              onClick={prev}
-              style={dots.arrowStyle}
-            >
-              <Chevron dir={arrowDir(orientation, 'prev')} />
-            </button>
-          ) : null}
-
-          {Array.from({ length: total }, (_, i) => {
-            const active = i === idx
-            return (
-              <button
-                key={i}
-                type="button"
-                className={dots.dotStyle ? undefined : 'slides-dot'}
-                aria-label={`Go to slide ${i + 1}`}
-                aria-current={active ? 'true' : undefined}
-                style={dots.dotStyle ? dots.dotStyle(active) : undefined}
-                onClick={() => goTo(i)}
-              />
-            )
-          })}
-
-          {dots.arrows ? (
-            <button
-              type="button"
-              className="slides-arrow"
-              aria-label="Next slide"
-              disabled={onLast}
-              onClick={next}
-              style={dots.arrowStyle}
-            >
-              <Chevron dir={arrowDir(orientation, 'next')} />
-            </button>
-          ) : null}
-        </nav>
+        <DotsRail
+          nav={{ idx, total, goTo, next, prev, onFirst, onLast }}
+          options={dots}
+          orientation={orientation}
+          baseStyle={positionStyle(dots.position ?? 'bottom-right')}
+          noun="slide"
+          testid="slides-dots"
+          ariaLabel="Slides"
+        />
       ) : null}
     </>
   )

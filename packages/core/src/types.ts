@@ -73,19 +73,33 @@ export type ChromeCorner =
   | 'bottom-left'
   | 'bottom-right'
 
+export type ChromePosition = ChromeCorner | 'left' | 'right'
+
 export type DotsOrientation = 'horizontal' | 'vertical'
 
+export interface ChromeSurface {
+  background?: string
+  opacity?: number
+  borderColor?: string
+  borderWidth?: number
+  shadow?: string | boolean
+  radius?: number
+  padding?: number
+}
+
 export interface ChromeCounterOptions {
-  position?: ChromeCorner
+  position?: ChromePosition
   style?: CSSProperties
   className?: string
+  appearance?: ChromeSurface
   render?: (info: { current: string; total: string; idx: number; total_: number }) => ReactNode
 }
 
 export interface ChromeDotsOptions {
-  position?: ChromeCorner
+  position?: ChromePosition
   orientation?: DotsOrientation
   arrows?: boolean
+  appearance?: ChromeSurface
   style?: CSSProperties
   className?: string
   dotStyle?: (active: boolean) => CSSProperties
@@ -101,6 +115,7 @@ export interface ChromeOptions {
   progress?: boolean | ChromeProgressOptions
   counter?: boolean | ChromeCounterOptions
   dots?: boolean | ChromeDotsOptions
+  rowDots?: ChromeDotsOptions
 }
 
 export interface SlideSpec {

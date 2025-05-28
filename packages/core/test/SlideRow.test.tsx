@@ -58,6 +58,34 @@ describe('SlideRow', () => {
     expect(dots[1]).not.toHaveAttribute('aria-current')
   })
 
+  it('applies chrome appearance and arrows to the row dots', () => {
+    render(
+      <SlideRow
+        chrome={{
+          arrows: true,
+          appearance: { background: 'rgb(10, 10, 10)', borderWidth: 1, radius: 20, padding: 6 },
+        }}
+      >
+        <A />
+        <B />
+      </SlideRow>,
+    )
+    const rail = screen.getByTestId('slides-row-dots')
+    expect(rail).toHaveStyle({ background: 'rgb(10, 10, 10)', borderRadius: '20px', padding: '6px' })
+    expect(screen.getByRole('button', { name: 'Previous sub-slide' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Next sub-slide' })).toBeInTheDocument()
+  })
+
+  it('routes a Deck array group through chrome.rowDots', () => {
+    render(
+      <Deck chrome={{ rowDots: { arrows: true } }}>
+        <A />
+        {[<B key="b" />, <C key="c" />]}
+      </Deck>,
+    )
+    expect(screen.getByRole('button', { name: 'Next sub-slide' })).toBeInTheDocument()
+  })
+
   it('auto-advances horizontally on the configured interval while on screen', () => {
     vi.useFakeTimers()
     vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {

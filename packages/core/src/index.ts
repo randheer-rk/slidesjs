@@ -28,11 +28,13 @@ export type {
   SlideLayout,
   SlideAlign,
   ChromeCorner,
+  ChromePosition,
   DotsOrientation,
   ChromeOptions,
   ChromeCounterOptions,
   ChromeDotsOptions,
   ChromeProgressOptions,
+  ChromeSurface,
 } from './types'
 
 export type { ChromeProps } from './Chrome'
