@@ -1,9 +1,19 @@
 {
   "name": "@slidesjs/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Core React runtime for slidesjs presentations — the deck, slides, navigation hook and theming.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/randheer-rk/slidesjs.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/randheer-rk/slidesjs/tree/main/packages/core#readme",
+  "bugs": "https://github.com/randheer-rk/slidesjs/issues",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": ["dist"],
   "main": "./dist/index.js",
   "module": "./dist/index.js",

@@ -1,9 +1,19 @@
 {
   "name": "@slidesjs/export",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Export slidesjs decks to PDF, static HTML or PNG using headless Chrome.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/randheer-rk/slidesjs.git",
+    "directory": "packages/export"
+  },
+  "homepage": "https://github.com/randheer-rk/slidesjs/tree/main/packages/export#readme",
+  "bugs": "https://github.com/randheer-rk/slidesjs/issues",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": ["dist"],
   "main": "./dist/index.js",
   "module": "./dist/index.js",

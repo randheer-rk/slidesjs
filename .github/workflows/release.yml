@@ -1,0 +1,45 @@
+name: Release
+
+# Builds every @slidesjs/* package and creates a GitHub Release when a version
+# tag is pushed. No npm publishing — the built packages are attached as .tgz
+# tarballs to the release.
+#
+#   1. bump the "version" in each packages/*/package.json (keep them in sync)
+#   2. commit, then:  git tag v0.1.0 && git push --tags
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # contents: write lets the GitHub Release step create a release for the tag.
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm first so setup-node can cache its store. Version is read from the
+      # root package.json "packageManager" field (pnpm@11.6.0).
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      # Pack each built package into a .tgz to attach to the GitHub Release.
+      - run: pnpm -r --filter "./packages/*" exec pnpm pack --pack-destination "$GITHUB_WORKSPACE/release-artifacts"
+
+      # Create the GitHub Release for this tag with auto-generated notes and the
+      # tarballs attached. Uses the built-in gh CLI; no extra secrets needed.
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" release-artifacts/*.tgz --generate-notes --title "$GITHUB_REF_NAME"

@@ -1,9 +1,19 @@
 {
   "name": "@slidesjs/vite",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Vite plugin that compiles Markdown and MDX deck files into slidesjs slides.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/randheer-rk/slidesjs.git",
+    "directory": "packages/vite"
+  },
+  "homepage": "https://github.com/randheer-rk/slidesjs/tree/main/packages/vite#readme",
+  "bugs": "https://github.com/randheer-rk/slidesjs/issues",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": ["dist"],
   "main": "./dist/index.js",
   "module": "./dist/index.js",

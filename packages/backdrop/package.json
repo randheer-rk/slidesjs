@@ -1,9 +1,19 @@
 {
   "name": "@slidesjs/backdrop",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Animated Three.js particle backdrop for slidesjs decks.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/randheer-rk/slidesjs.git",
+    "directory": "packages/backdrop"
+  },
+  "homepage": "https://github.com/randheer-rk/slidesjs/tree/main/packages/backdrop#readme",
+  "bugs": "https://github.com/randheer-rk/slidesjs/issues",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": ["dist"],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
