@@ -47,9 +47,10 @@ export interface SlideRowProps {
   children: ReactNode
   autoScroll?: number
   chrome?: ChromeDotsOptions
+  frame?: boolean
 }
 
-export function SlideRow({ children, autoScroll, chrome = {} }: SlideRowProps) {
+export function SlideRow({ children, autoScroll, chrome = {}, frame = true }: SlideRowProps) {
   const slides = useMemo(() => Children.toArray(children).map(wrapAsSlide), [children])
   const total = Math.max(1, slides.length)
   const print = isPrintMode()
@@ -202,6 +203,14 @@ export function SlideRow({ children, autoScroll, chrome = {} }: SlideRowProps) {
           </div>
         ))}
       </div>
+      {frame && total > 1 ? (
+        <div className="slides-row-frame" data-testid="slides-row-frame" aria-hidden="true">
+          <span className="slides-row-corner" data-c="tl" />
+          <span className="slides-row-corner" data-c="tr" />
+          <span className="slides-row-corner" data-c="bl" />
+          <span className="slides-row-corner" data-c="br" />
+        </div>
+      ) : null}
       {total > 1 ? (
         <DotsRail
           nav={{

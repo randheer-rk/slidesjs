@@ -58,6 +58,33 @@ describe('SlideRow', () => {
     expect(dots[1]).not.toHaveAttribute('aria-current')
   })
 
+  it('frames a multi-sub-slide row with corner brackets by default', () => {
+    render(
+      <SlideRow>
+        <A />
+        <B />
+      </SlideRow>,
+    )
+    const f = screen.getByTestId('slides-row-frame')
+    expect(f.querySelectorAll('.slides-row-corner')).toHaveLength(4)
+  })
+
+  it('omits the frame when frame is false or there is one sub-slide', () => {
+    const { rerender } = render(
+      <SlideRow frame={false}>
+        <A />
+        <B />
+      </SlideRow>,
+    )
+    expect(screen.queryByTestId('slides-row-frame')).toBeNull()
+    rerender(
+      <SlideRow>
+        <A />
+      </SlideRow>,
+    )
+    expect(screen.queryByTestId('slides-row-frame')).toBeNull()
+  })
+
   it('applies chrome appearance and arrows to the row dots', () => {
     render(
       <SlideRow

@@ -162,3 +162,67 @@
 .slides-row .slides-inner {
   animation: none;
 }
+
+.slides-row-frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.slides-row-frame::before,
+.slides-row-frame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 44px;
+  z-index: 1;
+}
+
+.slides-row-frame::before {
+  left: 0;
+  background: linear-gradient(to right, var(--slides-bg), transparent);
+}
+
+.slides-row-frame::after {
+  right: 0;
+  background: linear-gradient(to left, var(--slides-bg), transparent);
+}
+
+.slides-row-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--slides-accent);
+  opacity: 0.6;
+  z-index: 2;
+}
+
+.slides-row-corner[data-c='tl'] {
+  top: 20px;
+  left: 20px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.slides-row-corner[data-c='tr'] {
+  top: 20px;
+  right: 20px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.slides-row-corner[data-c='bl'] {
+  bottom: 20px;
+  left: 20px;
+  border-right: none;
+  border-top: none;
+}
+
+.slides-row-corner[data-c='br'] {
+  bottom: 20px;
+  right: 20px;
+  border-left: none;
+  border-top: none;
+}
