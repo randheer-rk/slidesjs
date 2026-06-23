@@ -12,7 +12,11 @@ const isPrint = (): boolean => isPrintMode()
 const pageStyle = (print: boolean): CSSProperties => ({
   position: 'relative',
   width: '100%',
-  height: print ? undefined : '100vh',
+  // svh (small viewport height = the address-bar-shown height), not vh: on
+  // mobile `100vh` is the address-bar-HIDDEN height, so with the bar visible a
+  // 100vh section overflows the screen and anything anchored to its bottom
+  // (e.g. the SlideRow frame's bottom corners) falls below the fold.
+  height: print ? undefined : '100svh',
   minHeight: print ? '100vh' : undefined,
   scrollSnapAlign: print ? undefined : 'start',
   scrollSnapStop: print ? undefined : 'always',
@@ -23,7 +27,7 @@ const pageStyle = (print: boolean): CSSProperties => ({
 const scrollerStyle = (print: boolean): CSSProperties => ({
   position: print ? 'relative' : 'fixed',
   inset: 0,
-  height: print ? 'auto' : '100vh',
+  height: print ? 'auto' : '100svh',
   overflowY: print ? 'visible' : 'auto',
   scrollSnapType: print ? undefined : 'y mandatory',
 })
