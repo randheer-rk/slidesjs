@@ -1,6 +1,6 @@
 {
   "name": "@slidesjs/backdrop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Animated Three.js particle backdrop for slidesjs decks.",
   "type": "module",
   "license": "MIT",
